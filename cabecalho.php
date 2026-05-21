@@ -12,4 +12,14 @@
     </style>
 </head>
 <body>
-    <h1>Lista de Contatos</h1>
+    <header>
+        <h1>Lista de Contatos</h1>
+        <nav>
+            <a href="./">Contatos</a>
+            <a href="clientes.php">Clientes</a>
+            <a href="produtos.php">Produtos</a><br>
+            <a href="cadastrarContato.php">Cadastrar Contato</a>
+            <a href="cadastrarCliente.php">Cadastrar Cliente</a>
+            <a href="cadastrarProduto.php">Cadastrar Produto</a>
+        </nav>
+    </header>
