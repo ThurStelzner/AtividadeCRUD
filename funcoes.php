@@ -92,7 +92,7 @@ function exibirTabelaClientes(array $clientes): void {
         echo "      <td>{$email}</td>\n";
         echo "      <td>{$fone}</td>\n";
         echo "      <td>{$cpf}</td>";
-        echo "      <td><a href='editarContato.php?id={$cliente['id']}'>Editar</a><a href='excluirContato.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
+        echo "      <td><a href='editarCliente.php?id={$cliente['id']}'>Editar</a><a href='excluirCliente.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 
