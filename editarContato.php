@@ -12,13 +12,17 @@
         $nome = trim($_POST['nome']) ?? '';
         $email = trim($_POST['email']) ?? '';
         $telefone = trim($_POST['telefone']) ?? '';
+        $fTel = formatarTelefone($telefone);
+        if ($fTel === false) {
+            echo "Erro! Telefone inválido.";
+        } else {
+            $sql = 'UPDATE contatos SET nome = ?, email = ?, telefone = ?, id = ?';
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$nome, $email, $fTel, $id]);
 
-        $sql = 'UPDATE contatos SET nome = ?, email = ?, telefone = ?, id = ?';
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$nome, $email, $telefone, $id]);
-
-        header("Location: ./");
-        exit();
+            header("Location: ./");
+            exit();
+        }
     }
 
 ?>

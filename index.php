@@ -7,6 +7,7 @@ include_once "funcoes.php";   // inclui apenas uma vez
 
 $contatos = obterContatos($pdo);
 exibirTabelaContatos($contatos);
+criarDiretorio();
 ?>
 
 </body>

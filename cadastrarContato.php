@@ -7,12 +7,16 @@
         $nome = trim($_POST['nome']) ?? '';
         $email = trim($_POST['email']) ?? '';
         $telefone = trim($_POST['telefone']) ?? '';
+        $fTEL = formatarTelefone($telefone);
 
-        cadastrarContato($nome, $email, $telefone, $pdo);
-        if(true) {
+        if($fTEL === false) {
+            echo "Erro! Telefone inválido.";
+        } else {
+            cadastrarContato($nome, $email, $fTEL, $pdo);
             header("Location: ./");
             exit();
         }
+        
     }
 ?>
 

@@ -1,5 +1,8 @@
 <?php
 // funcoes.php — funções reutilizáveis
+
+use BcMath\Number;
+
 include_once "config.php";
 /**
  * Retorna o array de contatos.
@@ -19,6 +22,13 @@ function obterClientes($pdo) {
 
     return $dados;
 }
+function obterProdutos($pdo) {
+    $sql = "SELECT * FROM produtos";
+    $stmt = $pdo->query($sql);
+    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    return $dados;
+}
 
 function cadastrarContato($nome, $email, $telefone, $pdo){
     $sql = 'INSERT INTO contatos (nome, email, telefone) VALUES (?,?,?)';
@@ -26,13 +36,18 @@ function cadastrarContato($nome, $email, $telefone, $pdo){
     $stmt->execute([$nome, $email, $telefone]);
     return true;
 }
-function cadastrarCliente($nome, $email, $telefone, $cpf, $pdo){
-    $sql = 'INSERT INTO clientes (nome, email, telefone, cpf) VALUES (?,?,?,?)';
+function cadastrarCliente($nome, $email, $telefone, $cpf, $endereco, $pdo){
+    $sql = 'INSERT INTO clientes (nome, email, telefone, cpf, endereco) VALUES (?,?,?,?,?)';
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nome, $email, $telefone, $cpf]);
+    $stmt->execute([$nome, $email, $telefone, $cpf, $endereco]);
     return true;
 }
-
+function cadastrarProduto($nomeArquivo, $nome, $descricao, $preco, $estoque, $pdo){
+    $sql = 'INSERT INTO produtos (imagem, nome, descricao, preco, estoque) VALUES (?,?,?,?,?)';
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$nomeArquivo, $nome, $descricao, $preco, $estoque]);
+    return true;
+}
 /**
  * Renderiza a tabela HTML com a lista de contatos.
  */
@@ -75,7 +90,7 @@ function exibirTabelaClientes(array $clientes): void {
 
     echo "<table>\n";
     echo "  <thead>\n";
-    echo "    <tr><th>#</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>CPF</th><th>Ação</th></tr>\n";
+    echo "    <tr><th>#</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>CPF</th><th>Endereco</th><th>Ação</th></tr>\n";
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
@@ -85,6 +100,7 @@ function exibirTabelaClientes(array $clientes): void {
         $email = htmlspecialchars($cliente['email']);
         $fone  = htmlspecialchars($cliente['telefone']);
         $cpf  = htmlspecialchars($cliente['cpf']);
+        $endereco = htmlspecialchars($cliente['endereco']);
 
         echo "    <tr>\n";
         echo "      <td>{$num}</td>\n";
@@ -92,10 +108,81 @@ function exibirTabelaClientes(array $clientes): void {
         echo "      <td>{$email}</td>\n";
         echo "      <td>{$fone}</td>\n";
         echo "      <td>{$cpf}</td>";
+        echo "      <td>{$endereco}</td>";
         echo "      <td><a href='editarCliente.php?id={$cliente['id']}'>Editar</a><a href='excluirCliente.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 
     echo "  </tbody>\n";
     echo "</table>\n";
+}
+
+function exibirTabelaProdutos(array $produtos): void {
+    if (empty($produtos)) {
+        echo "<p>Nenhum produto encontrado.</p>";
+        return;
+    }
+
+    echo "<table>\n";
+    echo "  <thead>\n";
+    echo "    <tr><th>#</th><th>Nome</th><th>Descrição</th><th>Preço</th><th>Estoque</th><th>Ação</th></tr>\n";
+    echo "  </thead>\n";
+    echo "  <tbody>\n";
+
+    foreach ($produtos as $produto) {
+        $num   = htmlspecialchars($produto['id']);
+        $image = htmlspecialchars($produto['imagem']);
+        $nome  = htmlspecialchars($produto['nome']);
+        $descricao = htmlspecialchars($produto['descricao']);
+        $preco  = htmlspecialchars($produto['preco']);
+        $estoque  = htmlspecialchars($produto['estoque']);
+
+        echo "    <tr>\n";
+        echo "      <td>{$num}</td>\n";
+        echo "      <td>{$nome}</td>\n";
+        echo "      <td>{$descricao}</td>\n";
+        echo "      <td>{$preco}</td>\n";
+        echo "      <td>{$estoque}</td>";
+        echo "      <td><a href='editarProduto.php?id={$produto['id']}'>Editar</a><a href='excluirProduto.php?id={$produto['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
+        echo "    </tr>\n";
+    }
+
+    echo "  </tbody>\n";
+    echo "</table>\n";
+}
+
+function formatarCpf($cpf) {
+  $CPF_LENGTH = 11;
+  $fCpf = preg_replace("/\D/", '', $cpf);
+  
+    if (strlen($fCpf) === $CPF_LENGTH) {
+        return preg_replace("/(\d{3})(\d{3})(\d{3})(\d{2})/", "\$1.\$2.\$3-\$4", $fCpf);
+    } else {
+        return false;
+    }
+}
+
+function formatarTelefone($telefone) {
+    $TEL_LENGHT = 11;
+    $TEL_FIX_LENGHT = 10;
+    $fTel = preg_replace("/\D/", '', $telefone);
+
+    if (strlen($fTel) === $TEL_FIX_LENGHT) {
+        return preg_replace("/(\d{2})(\d{4})(\d{4})/", "(\$1)\$2-\$3", $fTel);
+    } elseif (strlen($fTel) === $TEL_LENGHT) {
+        return preg_replace("/(\d{2})(\d{5})(\d{4})/", "(\$1)\$2-\$3", $fTel);
+    } else {
+        return false;
+    }
+}
+
+function formatarPreco($preco) {
+    return number_format($preco, 2, '.', '');
+}
+
+function criarDiretorio() {
+    $pasta = __DIR__ . '/uploads/';
+    if(!file_exists($pasta)){
+        mkdir($pasta, 0777, true);
+    };
 }
