@@ -1,0 +1,201 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg: #F8F9FA;
+    --dark-blue: #2C3E50; 
+    --gray-blue: #434c55; 
+    --border: #537495;
+    --head: #161F28;
+    --font: #EEF1F4;
+    --hover: #9EB1C4;
+}
+
+html.dark-mode {
+    --bg: #121A21; 
+    --dark-blue: #002244; 
+    --gray-blue: #001225; 
+    --border: #2C3E50; 
+    --head: #F8F9FA; 
+    --font: #D1D9E0; 
+    --hover: #3A4C5D;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--bg);
+    font-family: "Outfit", sans-serif;
+}
+
+header h1 {
+    font-family: "Archivo Black", sans-serif;
+}
+
+header {
+    background-color: var(--dark-blue);
+    color: var(--font);
+    padding: 1rem 2rem;
+    width: 100%;
+    position: fixed;
+    top: 0;
+}
+
+header a{
+    color: var(--font);
+    transition: 0.3s ease;
+    padding-right: 30px;
+    font-family: "Montserrat", sans-serif;
+}
+
+header a:hover {
+    color: var(--hover);
+}
+
+header select {
+    position: fixed;
+    right: 3rem;
+    top: 2rem;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 3px;
+    outline: none;
+    font-family: "Montserrat", sans-serif;
+    background-color: var(--font);
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    width: 10rem;
+    height: 10rem;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: var(--gray-blue);
+    color: var(--font);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+table {
+    background-color: var(--dark-blue);
+    width: 90%;
+    max-width: 95%;
+    color: var(--head);
+}
+
+table a {
+    padding: 5px;
+    border-radius: 5px;
+    color: var(--font);
+    margin-right: 5px;
+}
+
+.btnModo {
+    position: fixed;
+    right: 15rem;
+    top: 2rem;
+    padding: 5px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: none;
+    background-color: var(--font);
+}
+
+.btnEditar {
+    background-color: rgb(255, 145, 0);
+    border: 1px solid rgb(255, 145, 0);
+    transition: all 0.3s ease;
+}
+
+.btnExcluir {
+    background-color: red;
+    border: 1px solid red;
+    transition: all 0.3s ease;
+}
+
+.btnEditar:hover, .btnExcluir:hover {
+    background-color: transparent;
+    color: var(--head);
+}
+
+th, td {
+    background-color: var(--bg);
+    padding: 10px;
+    text-align: center;
+}
+
+
+td {
+    font-family: "Montserrat", sans-serif;
+}
+form {
+    width: 50rem;
+    height: fit-content;
+    padding: 30px;
+    background-color: var(--dark-blue);
+    color: var(--font);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+
+form button {
+    width: 10rem;
+    padding: 5px;
+    border-radius: 5px;
+    border: none;
+    background-color: var(--hover);
+    cursor: pointer;
+    transition: 0.2s ease-in-out;
+    font-family: "Outfit", sans-serif;
+}
+
+form button:hover {
+    background-color: var(--border);
+}
+
+input {
+    margin-bottom: 20px;
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-bottom: 1px solid var(--font);
+    background: transparent;
+    outline: none;
+    color: var(--font);
+    font-family: "Outfit", sans-serif;
+}
+
+span {
+    color: var(--head);
+}
+
+.arquivo {
+    color: var(--font);
+}
+
+form img {
+    position: absolute;
+    display: flex;
+    align-self: flex-start;
+}

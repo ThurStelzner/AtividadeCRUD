@@ -2,6 +2,7 @@
     require_once "config.php";
     require_once "funcoes.php";
     require "cabecalho.php";
+    require "rodape.html";
 
     $id = $_GET['id'];
 
@@ -51,6 +52,3 @@
         <input type="text" name="endereco" value="<?= $cliente['endereco']?>" required>
         <button type="submit">Confirmar</button>
     </form>
-
-</body>
-</html>

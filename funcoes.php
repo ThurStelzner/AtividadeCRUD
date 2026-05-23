@@ -53,7 +53,7 @@ function cadastrarProduto($nomeArquivo, $nome, $descricao, $preco, $estoque, $pd
  */
 function exibirTabelaContatos(array $contatos): void {
     if (empty($contatos)) {
-        echo "<p>Nenhum contato encontrado.</p>";
+        echo "<span>Nenhum contato encontrado.</span>";
         return;
     }
 
@@ -74,7 +74,7 @@ function exibirTabelaContatos(array $contatos): void {
         echo "      <td>{$nome}</td>\n";
         echo "      <td>{$email}</td>\n";
         echo "      <td>{$fone}</td>\n";
-        echo "      <td><a href='editarContato.php?id={$contato['id']}'>Editar</a><a href='excluirContato.php?id={$contato['id']}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)'>Excluir</a></td>\n";   
+        echo "      <td><a href='editarContato.php?id={$contato['id']}' class='btnEditar'>Editar</a><a href='excluirContato.php?id={$contato['id']}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)' class='btnExcluir'>Excluir</a></td>\n";   
         echo "    </tr>\n";
     }
 
@@ -84,7 +84,7 @@ function exibirTabelaContatos(array $contatos): void {
 
 function exibirTabelaClientes(array $clientes): void {
     if (empty($clientes)) {
-        echo "<p>Nenhum cliente encontrado.</p>";
+        echo "<span>Nenhum cliente encontrado.</span>";
         return;
     }
 
@@ -109,7 +109,7 @@ function exibirTabelaClientes(array $clientes): void {
         echo "      <td>{$fone}</td>\n";
         echo "      <td>{$cpf}</td>";
         echo "      <td>{$endereco}</td>";
-        echo "      <td><a href='editarCliente.php?id={$cliente['id']}'>Editar</a><a href='excluirCliente.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
+        echo "      <td><a href='editarCliente.php?id={$cliente['id']}' class='btnEditar'>Editar</a><a href='excluirCliente.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)' class='btnExcluir'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 
@@ -119,13 +119,13 @@ function exibirTabelaClientes(array $clientes): void {
 
 function exibirTabelaProdutos(array $produtos): void {
     if (empty($produtos)) {
-        echo "<p>Nenhum produto encontrado.</p>";
+        echo "<span>Nenhum produto encontrado.</span>";
         return;
     }
 
     echo "<table>\n";
     echo "  <thead>\n";
-    echo "    <tr><th>#</th><th>Nome</th><th>Descrição</th><th>Preço</th><th>Estoque</th><th>Ação</th></tr>\n";
+    echo "    <tr><th>#</th><th>Imagem</th><th>Nome</th><th>Descrição</th><th>Preço</th><th>Estoque</th><th>Ação</th></tr>\n";
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
@@ -139,11 +139,12 @@ function exibirTabelaProdutos(array $produtos): void {
 
         echo "    <tr>\n";
         echo "      <td>{$num}</td>\n";
+        echo "      <td><img src='./uploads/{$image}' alt='Foto produto {$nome}'></td>";
         echo "      <td>{$nome}</td>\n";
         echo "      <td>{$descricao}</td>\n";
-        echo "      <td>{$preco}</td>\n";
+        echo "      <td>R$:$preco</td>\n";
         echo "      <td>{$estoque}</td>";
-        echo "      <td><a href='editarProduto.php?id={$produto['id']}'>Editar</a><a href='excluirProduto.php?id={$produto['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)'>Excluir</a></td>\n";
+        echo "      <td><a href='editarProduto.php?id={$produto['id']}' class='btnEditar'>Editar</a><a href='excluirProduto.php?id={$produto['id']}' onclick='return confirm(`Tem certeza que deseja excluir este produto?`)' class='btnExcluir'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 
@@ -177,12 +178,21 @@ function formatarTelefone($telefone) {
 }
 
 function formatarPreco($preco) {
-    return number_format($preco, 2, '.', '');
+    if($preco <= 0) {
+        return false;
+    } else {
+        $resultado = number_format($preco, 2, '.', '');
+        return $resultado;
+    }
 }
 
 function criarDiretorio() {
     $pasta = __DIR__ . '/uploads/';
     if(!file_exists($pasta)){
-        mkdir($pasta, 0777, true);
+        mkdir($pasta, 0755, true);
     };
+
+    $local = $pasta . "placeholder.jpeg";
+    $imagem = @file_get_contents("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png");
+    @file_put_contents($local, $imagem);
 }

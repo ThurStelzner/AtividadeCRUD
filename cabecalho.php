@@ -1,25 +1,53 @@
 <!-- cabecalho.php -->
+<?php
+    $paginaAtual = basename($_SERVER['SCRIPT_NAME']);
+
+    switch($paginaAtual) {
+        case "index.php":
+            $titulo = "Lista de contatos";
+            break;
+        case "clientes.php":
+            $titulo = "Lista de clientes";
+            break;
+        case "produtos.php":
+            $titulo = "Lista de produtos";
+            break;
+        default:
+            $titulo = "CRUD PHP";
+            break;
+    }
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Contatos</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-        th { background-color: #eee; }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <title>CRUD PHP</title>
 </head>
 <body>
     <header>
-        <h1>Lista de Contatos</h1>
+        <h1><?= $titulo ?></h1>
         <nav>
             <a href="./">Contatos</a>
             <a href="clientes.php">Clientes</a>
             <a href="produtos.php">Produtos</a><br>
-            <a href="cadastrarContato.php">Cadastrar Contato</a>
-            <a href="cadastrarCliente.php">Cadastrar Cliente</a>
-            <a href="cadastrarProduto.php">Cadastrar Produto</a>
         </nav>
+        <div class="selecao">
+            <select onchange="if(this.value) {window.location.href = this.value}">
+                <option value="">Cadastros</option>
+                <option value="cadastrarContato.php">Cadastrar Contato</option>
+                <option value="cadastrarCliente.php">Cadastrar Cliente</option>
+                <option value="cadastrarProduto.php">Cadastrar Produto</option>
+            </select>
+        </div>
+        <button type="button" id="btnModo" class="btnModo" onclick="alterarTema()">Modo Escuro</button>
     </header>

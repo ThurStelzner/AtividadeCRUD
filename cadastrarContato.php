@@ -2,6 +2,7 @@
     require_once "config.php";
     include "cabecalho.php";
     include_once "funcoes.php";
+    require "rodape.html";
 
     if($_SERVER['REQUEST_METHOD'] === "POST") {
         $nome = trim($_POST['nome']) ?? '';
@@ -25,11 +26,8 @@
     <label for="nome">Nome:</label>
     <input type="text" name="nome" id="nome" placeholder="Seu nome aqui" required>
     <label for="email">Email:</label>
-    <input type="email" name="email" id="email" placeholder="Seu nome aqui" required>
+    <input type="email" name="email" id="email" placeholder="Seu email aqui" required>
     <label for="Telefone">Telefone:</label>
-    <input type="text" name="telefone" id="telefone" maxlength="14" placeholder="Seu nome aqui" required>
+    <input type="text" name="telefone" id="telefone" maxlength="14" placeholder="Seu telefone aqui" required>
     <button type="submit">Cadastrar</button>
 </form>
-
-</body>
-</html>

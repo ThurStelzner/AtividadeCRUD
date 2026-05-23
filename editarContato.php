@@ -1,6 +1,7 @@
 <?php
     require_once "config.php";
     include "cabecalho.php";
+    require "rodape.html";
 
     $id = $_GET['id'];
     $sql = 'SELECT * FROM contatos WHERE id = ?';
@@ -37,6 +38,3 @@
         <input type="text" name="telefone" value="<?= $contato['telefone'] ?>" required>
         <button type="submit">Confirmar</button>
     </form>
-
-</body>
-</html>

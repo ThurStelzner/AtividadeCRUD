@@ -2,6 +2,7 @@
     include "cabecalho.php";
     require_once "config.php";
     include_once "funcoes.php";
+    require "rodape.html";
 
     if($_SERVER['REQUEST_METHOD'] === "POST") {
         $nome = trim($_POST['nome']) ?? '';
@@ -39,6 +40,3 @@
         <input type="text" name="endereco" placeholder="Endereço do cliente aqui" required>
         <button type="submit">Cadastrar</button>
     </form>
-
-</body>
-</html>
