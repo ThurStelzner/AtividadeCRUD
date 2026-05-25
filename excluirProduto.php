@@ -10,12 +10,17 @@
     $produto = $stmt2->fetch(PDO::FETCH_ASSOC);
 
     if(file_exists($arquivo . $produto['imagem'])) {
-        unlink($arquivo . $produto['imagem']);
+        if($produto['imagem'] === 'placeholder.jpeg'){
+            $sql = "DELETE FROM produtos WHERE id=?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id]);
+        } else {
+            unlink($arquivo . $produto['imagem']);
+            $sql = "DELETE FROM produtos WHERE id=?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id]);
+        }
     };
-
-    $sql = "DELETE FROM produtos WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id]);
 
     header("Location: produtos.php");
     exit();
