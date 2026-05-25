@@ -3,6 +3,10 @@
     require "cabecalho.php";
     include_once "funcoes.php";
     require "rodape.html";
-    $produtos = obterProdutos($pdo);
-    exibirTabelaProdutos($produtos);
 ?>
+<div class="tabela">
+    <?php
+        $produtos = obterProdutos($pdo);
+        exibirTabelaProdutos($produtos);
+    ?>
+</div>

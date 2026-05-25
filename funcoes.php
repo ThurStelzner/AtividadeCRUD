@@ -178,7 +178,7 @@ function formatarTelefone($telefone) {
 }
 
 function formatarPreco($preco) {
-    if(is_int($preco)){
+    if(is_numeric($preco)){
         if($preco > 0) {
             $resultado = number_format($preco, 2, '.', '');
             return $resultado;
