@@ -178,11 +178,15 @@ function formatarTelefone($telefone) {
 }
 
 function formatarPreco($preco) {
-    if($preco <= 0) {
-        return false;
+    if(is_int($preco)){
+        if($preco > 0) {
+            $resultado = number_format($preco, 2, '.', '');
+            return $resultado;
+        } else {
+            return false;
+        }
     } else {
-        $resultado = number_format($preco, 2, '.', '');
-        return $resultado;
+        return false;
     }
 }
 

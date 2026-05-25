@@ -32,6 +32,7 @@ body {
     height: 100vh;
     background-color: var(--bg);
     font-family: "Outfit", sans-serif;
+    transition: all 0.5s ease-in-out;
 }
 
 header h1 {
@@ -198,4 +199,8 @@ form img {
     position: absolute;
     display: flex;
     align-self: flex-start;
+}
+
+p {
+    color: var(--font);
 }
