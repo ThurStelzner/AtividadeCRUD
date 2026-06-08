@@ -1,10 +1,13 @@
 <?php
-    require_once "config.php";
-    include "cabecalho.php";
-    include_once "funcoes.php";
-    require "rodape.html";
+    require_once "../config/config.php";
+    include "../view/cabecalho.php";
+    include_once "../config/funcoes.php";
+    require "../view/rodape.html";
+    include_once "../models/contatoDAO.php";    
+    include_once "../models/contato.php";
 
     if($_SERVER['REQUEST_METHOD'] === "POST") {
+        $dao = new ContatoDAO;
         $nome = trim($_POST['nome']) ?? '';
         $email = trim($_POST['email']) ?? '';
         $telefone = trim($_POST['telefone']) ?? '';
@@ -13,8 +16,8 @@
         if($fTEL === false) {
             echo "Erro! Telefone inválido.";
         } else {
-            cadastrarContato($nome, $email, $fTEL, $pdo);
-            header("Location: ./");
+            $dao->createContato(new Contato($nome, $email, $fTEL));
+            header("Location: ../");
             exit();
         }
         

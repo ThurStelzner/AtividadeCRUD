@@ -1,8 +1,8 @@
 <?php
-    include "cabecalho.php";
-    require_once "config.php";
-    include_once "funcoes.php";
-    require "rodape.html";
+    include __DIR__ . "/cabecalho.php";
+    require_once __DIR__ . "/../config/config.php";
+    include_once __DIR__ . "/../config/funcoes.php";
+    require __DIR__ . "/rodape.html";
 
     if($_SERVER['REQUEST_METHOD'] === "POST") {
         $nome = trim($_POST['nome']) ?? '';

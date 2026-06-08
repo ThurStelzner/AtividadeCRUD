@@ -21,7 +21,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
@@ -37,16 +37,16 @@
     <header>
         <h1><?= $titulo ?></h1>
         <nav>
-            <a href="./">Contatos</a>
-            <a href="clientes.php">Clientes</a>
-            <a href="produtos.php">Produtos</a><br>
+            <a href="../">Contatos</a>
+            <a href="../?pagina=clientes">Clientes</a>
+            <a href="../?pagina=produtos">Produtos</a><br>
         </nav>
         <div class="selecao">
-            <select onchange="if(this.value) {window.location.href = this.value}">
-                <option value="">Cadastros</option>
-                <option value="cadastrarContato.php">Cadastrar Contato</option>
-                <option value="cadastrarCliente.php">Cadastrar Cliente</option>
-                <option value="cadastrarProduto.php">Cadastrar Produto</option>
+            <select onchange="if(this.value) {window.location.href = '../?pagina=' + this.value}">
+                <option value="" style="display: none;">Cadastros</option>
+                <option value="cadastrarContato">Cadastrar Contato</option>
+                <option value="cadastrarCliente">Cadastrar Cliente</option>
+                <option value="cadastrarProduto">Cadastrar Produto</option>
             </select>
         </div>
         <button type="button" id="btnModo" class="btnModo" onclick="alterarTema()">Modo Escuro</button>

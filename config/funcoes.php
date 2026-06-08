@@ -1,20 +1,12 @@
 <?php
 // funcoes.php — funções reutilizáveis
-
-use BcMath\Number;
-
-include_once "config.php";
+include_once __DIR__ . "/../config/config.php";
+include_once __DIR__ . "/../models/contatoDAO.php";
+include_once __DIR__ . "/../models/contato.php";
 /**
  * Retorna o array de contatos.
  * Em um projeto real, isso viria do banco de dados.
  */
-function obterContatos($pdo) {
-    $sql = "SELECT * FROM contatos";
-    $stmt = $pdo->query($sql);
-    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $dados;
-}
 function obterClientes($pdo) {
     $sql = "SELECT * FROM clientes";
     $stmt = $pdo->query($sql);
@@ -30,12 +22,6 @@ function obterProdutos($pdo) {
     return $dados;
 }
 
-function cadastrarContato($nome, $email, $telefone, $pdo){
-    $sql = 'INSERT INTO contatos (nome, email, telefone) VALUES (?,?,?)';
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nome, $email, $telefone]);
-    return true;
-}
 function cadastrarCliente($nome, $email, $telefone, $cpf, $endereco, $pdo){
     $sql = 'INSERT INTO clientes (nome, email, telefone, cpf, endereco) VALUES (?,?,?,?,?)';
     $stmt = $pdo->prepare($sql);
@@ -51,8 +37,10 @@ function cadastrarProduto($nomeArquivo, $nome, $descricao, $preco, $estoque, $pd
 /**
  * Renderiza a tabela HTML com a lista de contatos.
  */
-function exibirTabelaContatos(array $contatos): void {
-    if (empty($contatos)) {
+function exibirTabelaContatos() {
+    $dao = new ContatoDAO;
+    $listaContatos = $dao->readAllContatos();
+    if (empty($listaContatos)) {
         echo "<span>Nenhum contato encontrado.</span>";
         return;
     }
@@ -63,18 +51,18 @@ function exibirTabelaContatos(array $contatos): void {
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
-    foreach ($contatos as $contato) {
-        $num   = htmlspecialchars($contato['id']);
-        $nome  = htmlspecialchars($contato['nome']);
-        $email = htmlspecialchars($contato['email']);
-        $fone  = htmlspecialchars($contato['telefone']);
+    foreach ($listaContatos as $contato) {
+        $id   = htmlspecialchars($contato->getId());
+        $nome  = htmlspecialchars($contato->getNome());
+        $email = htmlspecialchars($contato->getEmail());
+        $fone  = htmlspecialchars($contato->getTelefone());
 
         echo "    <tr>\n";
-        echo "      <td>{$num}</td>\n";
+        echo "      <td>{$id}</td>\n";
         echo "      <td>{$nome}</td>\n";
         echo "      <td>{$email}</td>\n";
         echo "      <td>{$fone}</td>\n";
-        echo "      <td><a href='editarContato.php?id={$contato['id']}' class='btnEditar'>Editar</a><a href='excluirContato.php?id={$contato['id']}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)' class='btnExcluir'>Excluir</a></td>\n";   
+        echo "      <td><a href='editarContato.php?id={$contato->getId()}' class='btnEditar'>Editar</a><a href='./config/excluirContato.php?id={$contato->getId()}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)' class='btnExcluir'>Excluir</a></td>\n";   
         echo "    </tr>\n";
     }
 
@@ -90,7 +78,7 @@ function exibirTabelaClientes(array $clientes): void {
 
     echo "<table>\n";
     echo "  <thead>\n";
-    echo "    <tr><th>#</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>CPF</th><th>Endereco</th><th>Ação</th></tr>\n";
+    echo "    <tr><th>#</th><th>Nome</th><th>E-mail</th><th>Telefone</th><th>CPF</th><th>Endereço</th><th>Ação</th></tr>\n";
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
@@ -191,7 +179,7 @@ function formatarPreco($preco) {
 }
 
 function criarDiretorio() {
-    $pasta = __DIR__ . '/uploads/';
+    $pasta = __DIR__ . '/../uploads/';
     if(!file_exists($pasta)){
         mkdir($pasta, 0755, true);
     };

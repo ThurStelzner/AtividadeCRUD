@@ -1,6 +1,7 @@
 <?php
 
-    require_once "config.php";
+    require_once __DIR__ . "/config.php";
+    $pdo = Conexao::getConexao();
 
     $id = $_GET['id'];
 

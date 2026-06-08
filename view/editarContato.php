@@ -1,7 +1,10 @@
 <?php
-    require_once "config.php";
-    include "cabecalho.php";
-    require "rodape.html";
+    require_once __DIR__ . "/../config/config.php";    // erro fatal se não encontrar
+    include __DIR__ . "/cabecalho.php"; // warning se não encontrar
+    include_once __DIR__ . "/../config/funcoes.php";   // inclui apenas uma vez
+    require __DIR__ . "/rodape.html";
+
+    $pdo = Conexao::getConexao();
 
     $id = $_GET['id'];
     $sql = 'SELECT * FROM contatos WHERE id = ?';

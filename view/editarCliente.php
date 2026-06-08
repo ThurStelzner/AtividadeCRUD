@@ -1,8 +1,8 @@
 <?php
-    require_once "config.php";
-    require_once "funcoes.php";
-    require "cabecalho.php";
-    require "rodape.html";
+    require_once __DIR__ . "/../config/config.php";    // erro fatal se não encontrar
+    include __DIR__ . "/cabecalho.php"; // warning se não encontrar
+    include_once __DIR__ . "/../config/funcoes.php";   // inclui apenas uma vez
+    require __DIR__ . "/rodape.html";
 
     $id = $_GET['id'];
 
