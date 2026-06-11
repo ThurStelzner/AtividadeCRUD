@@ -1,15 +1,13 @@
 <?php
 
     require_once __DIR__ . "/config.php";
-    $pdo = Conexao::getConexao();
+    require_once __DIR__ . "/../models/clienteDAO.php";
 
     $id = $_GET['id'];
+    $dao = new ClienteDAO;
+    $dao->deleteCliente($id);
 
-    $sql = "DELETE FROM clientes WHERE id=?";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$id]);
-
-    header("Location: /clientes.php");
+    header("Location: ../view/clientes.php");
     exit();
 
 ?>

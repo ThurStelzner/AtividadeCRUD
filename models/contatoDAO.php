@@ -28,8 +28,9 @@
         }   
 
         public function updateContato($nome, $email, $telefone, $id) {
-            $sql = "UPDATE FROM contatos SET nome = ?, email = ?, telefone = ?, WHERE id = ?"
-            
+            $sql = "UPDATE contatos SET nome = ?, email = ?, telefone = ? WHERE id = ?";
+            $stmt = $this->pdo->prepare($sql);
+            $stmt->execute([$nome, $email, $telefone, $id]);
         }
 
         public function readAllContatos() {

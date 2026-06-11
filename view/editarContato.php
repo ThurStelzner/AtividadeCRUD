@@ -3,7 +3,7 @@
     include __DIR__ . "/cabecalho.php"; // warning se não encontrar
     include_once __DIR__ . "/../config/funcoes.php";   // inclui apenas uma vez
     require __DIR__ . "/rodape.html";
-
+    require_once __DIR__ . "/../models/contatoDAO.php";
     $pdo = Conexao::getConexao();
 
     $id = $_GET['id'];
@@ -20,11 +20,9 @@
         if ($fTel === false) {
             echo "Erro! Telefone inválido.";
         } else {
-            $sql = 'UPDATE contatos SET nome = ?, email = ?, telefone = ?, id = ?';
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$nome, $email, $fTel, $id]);
-
-            header("Location: ./");
+            $dao = new ContatoDAO();
+            $dao->updateContato($nome, $email, $fTel, $id);
+            header("Location: ../");
             exit();
         }
     }

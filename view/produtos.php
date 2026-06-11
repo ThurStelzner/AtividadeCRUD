@@ -6,7 +6,6 @@
 ?>
 <div class="tabela">
     <?php
-        $produtos = readAll($pdo);
-        exibirTabelaProdutos($produtos);
+        exibirTabelaProdutos();
     ?>
 </div>

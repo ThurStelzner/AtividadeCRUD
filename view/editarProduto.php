@@ -3,6 +3,9 @@
     require_once __DIR__ . "/../config/config.php";
     include_once __DIR__ . "/../config/funcoes.php";
     require __DIR__ . "/rodape.html";
+    require_once __DIR__ . "/../models/produtoDAO.php";
+
+    $pdo = Conexao::getConexao();
 
     $id = $_GET['id'];
 
@@ -13,7 +16,7 @@
     $produto = $stmt->fetch(PDO::FETCH_ASSOC);
     
     if($_SERVER['REQUEST_METHOD'] === "POST") {
-
+        $imagem = $_POST['imagem'];
         $nome = $_POST['nome'];
         $descricao = $_POST['descricao'];
         $preco = $_POST['preco'];
@@ -23,30 +26,10 @@
         if($fPreco === false) {
             echo "Preço inválido!";
         } else {
-            if (!empty($_FILES['imagem']['name'])) {
-                $extensao  = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
-                $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
-            
-                if (!in_array(strtolower($extensao), $permitidos)) {
-                    echo 'Tipo de imagem não permitido.';
-                } else {
-                    $nomeArquivo = uniqid('prod_') . '.' . $extensao;
-                    move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo);
-                    
-                    $sql = "UPDATE produtos SET imagem = ?, nome = ?, descricao = ?, preco = ?, estoque = ? WHERE id = ?";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->execute([$nomeArquivo, $nome, $descricao, $preco, $estoque, $id]);
-
-                    header("Location: produtos.php");
-                    exit();
-                }
-            } else {
-                $sql = "UPDATE produtos SET nome = ?, descricao = ?, preco = ?, estoque = ? WHERE id = ?";
-                $stmt = $pdo->prepare($sql);
-                $stmt->execute([$nome, $descricao, $preco, $estoque, $id]);
-                header("Location: produtos.php");
-                exit();
-            }
+            $dao = new ProdutoDAO;
+            $dao->updateProduto($nome, $descricao, $fPreco, $estoque, $id);
+            header("Location: ../view/produtos.php");
+            exit();
         }
     }
     

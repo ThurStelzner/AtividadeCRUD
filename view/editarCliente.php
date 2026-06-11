@@ -3,6 +3,9 @@
     include __DIR__ . "/cabecalho.php"; // warning se não encontrar
     include_once __DIR__ . "/../config/funcoes.php";   // inclui apenas uma vez
     require __DIR__ . "/rodape.html";
+    require_once __DIR__ . "/../models/clienteDAO.php";
+
+    $pdo = Conexao::getConexao();
 
     $id = $_GET['id'];
 
@@ -28,10 +31,8 @@
         } elseif ($fCPF === false) {
             echo "Erro! CPF inválido.";
         } else {
-            $sql = 'UPDATE clientes SET nome = ?, email = ?, telefone = ?, cpf = ?, endereco = ? WHERE id = ?';
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$nome, $email, $telefone, $cpf, $endereco, $id]);
-
+            $dao = new ClienteDAO();
+            $dao->updateCliente($nome, $email, $fTEL, $fCPF, $endereco, $id);
             header("Location: clientes.php");
             exit();
         }

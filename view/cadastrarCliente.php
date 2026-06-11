@@ -3,13 +3,15 @@
     require_once __DIR__ . "/../config/config.php";
     include_once __DIR__ . "/../config/funcoes.php";
     require __DIR__ . "/rodape.html";
+    include_once __DIR__ . "/../models/clienteDAO.php";
+    include_once __DIR__ . "/../models/cliente.php";
 
     if($_SERVER['REQUEST_METHOD'] === "POST") {
         $nome = trim($_POST['nome']) ?? '';
         $email = trim($_POST['email']) ?? '';
         $telefone = trim($_POST['telefone']) ?? '';
         $cpf = trim($_POST['cpf']) ?? '';
-        $endereco = trim($_POST['endereco']);
+        $endereco = trim($_POST['endereco']) ?? '';
         $fCPF = formatarCpf($cpf);
         $fTEL = formatarTelefone($telefone);
 
@@ -20,9 +22,14 @@
         } elseif ($fCPF === false) {
             echo "Erro! CPF inválido.";
         } else {
-            cadastrarCliente($nome, $email, $fTEL, $fCPF, $endereco, $pdo);
-            header("Location: clientes.php");
-            exit();
+            $dao = new ClienteDAO();
+            $verificação = $dao->createCliente(new Cliente($nome, $email, $fTEL, $fCPF, $endereco));
+            if($verificação == "CPF duplicado") {
+                echo "CPF já cadastrado!";
+            } else {
+                header("Location: ../view/clientes.php");
+                exit();
+            }
         }
 
     }

@@ -3,30 +3,20 @@
 include_once __DIR__ . "/../config/config.php";
 include_once __DIR__ . "/../models/contatoDAO.php";
 include_once __DIR__ . "/../models/contato.php";
+include_once __DIR__ . "/../models/cliente.php";
+include_once __DIR__ . "/../models/clienteDAO.php";
+include_once __DIR__ . "/../models/produto.php";
+include_once __DIR__ . "/../models/produtoDAO.php";
 /**
  * Retorna o array de contatos.
  * Em um projeto real, isso viria do banco de dados.
  */
-function obterClientes($pdo) {
-    $sql = "SELECT * FROM clientes";
-    $stmt = $pdo->query($sql);
-    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    return $dados;
-}
 function obterProdutos($pdo) {
     $sql = "SELECT * FROM produtos";
     $stmt = $pdo->query($sql);
     $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     return $dados;
-}
-
-function cadastrarCliente($nome, $email, $telefone, $cpf, $endereco, $pdo){
-    $sql = 'INSERT INTO clientes (nome, email, telefone, cpf, endereco) VALUES (?,?,?,?,?)';
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nome, $email, $telefone, $cpf, $endereco]);
-    return true;
 }
 function cadastrarProduto($nomeArquivo, $nome, $descricao, $preco, $estoque, $pdo){
     $sql = 'INSERT INTO produtos (imagem, nome, descricao, preco, estoque) VALUES (?,?,?,?,?)';
@@ -62,7 +52,7 @@ function exibirTabelaContatos() {
         echo "      <td>{$nome}</td>\n";
         echo "      <td>{$email}</td>\n";
         echo "      <td>{$fone}</td>\n";
-        echo "      <td><a href='editarContato.php?id={$contato->getId()}' class='btnEditar'>Editar</a><a href='./config/excluirContato.php?id={$contato->getId()}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)' class='btnExcluir'>Excluir</a></td>\n";   
+        echo "      <td><a href='../?pagina=editarContato&id={$contato->getId()}' class='btnEditar'>Editar</a><a href='../?pagina=excluirContato&id={$contato->getId()}' onclick='return confirm(`Tem certeza que deseja excluir este contato?`)' class='btnExcluir'>Excluir</a></td>\n";   
         echo "    </tr>\n";
     }
 
@@ -70,8 +60,10 @@ function exibirTabelaContatos() {
     echo "</table>\n";
 }
 
-function exibirTabelaClientes(array $clientes): void {
-    if (empty($clientes)) {
+function exibirTabelaClientes() {
+    $dao = new ClienteDAO;
+    $listaClientes = $dao->readAllClientes();
+    if (empty($listaClientes)) {
         echo "<span>Nenhum cliente encontrado.</span>";
         return;
     }
@@ -82,13 +74,13 @@ function exibirTabelaClientes(array $clientes): void {
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
-    foreach ($clientes as $cliente) {
-        $num   = htmlspecialchars($cliente['id']);
-        $nome  = htmlspecialchars($cliente['nome']);
-        $email = htmlspecialchars($cliente['email']);
-        $fone  = htmlspecialchars($cliente['telefone']);
-        $cpf  = htmlspecialchars($cliente['cpf']);
-        $endereco = htmlspecialchars($cliente['endereco']);
+    foreach ($listaClientes as $cliente) {
+        $num   = htmlspecialchars($cliente->getIdCliente());
+        $nome  = htmlspecialchars($cliente->getNomeCliente());
+        $email = htmlspecialchars($cliente->getEmailCliente());
+        $fone  = htmlspecialchars($cliente->getTelefoneCliente());
+        $cpf  = htmlspecialchars($cliente->getCpfCliente());
+        $endereco = htmlspecialchars($cliente->getEnderecoCliente());
 
         echo "    <tr>\n";
         echo "      <td>{$num}</td>\n";
@@ -97,7 +89,7 @@ function exibirTabelaClientes(array $clientes): void {
         echo "      <td>{$fone}</td>\n";
         echo "      <td>{$cpf}</td>";
         echo "      <td>{$endereco}</td>";
-        echo "      <td><a href='editarCliente.php?id={$cliente['id']}' class='btnEditar'>Editar</a><a href='excluirCliente.php?id={$cliente['id']}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)' class='btnExcluir'>Excluir</a></td>\n";
+        echo "      <td><a href='../?pagina=editarCliente&id={$cliente->getIdCliente()}' class='btnEditar'>Editar</a><a href='../?pagina=excluirCliente&id={$cliente->getIdCliente()}' onclick='return confirm(`Tem certeza que deseja excluir este cliente?`)' class='btnExcluir'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 
@@ -105,8 +97,10 @@ function exibirTabelaClientes(array $clientes): void {
     echo "</table>\n";
 }
 
-function exibirTabelaProdutos(array $produtos): void {
-    if (empty($produtos)) {
+function exibirTabelaProdutos() {
+    $dao = new ProdutoDAO;
+    $listaProdutos = $dao->readAllProdutos();
+    if (empty($listaProdutos)) {
         echo "<span>Nenhum produto encontrado.</span>";
         return;
     }
@@ -117,22 +111,22 @@ function exibirTabelaProdutos(array $produtos): void {
     echo "  </thead>\n";
     echo "  <tbody>\n";
 
-    foreach ($produtos as $produto) {
-        $num   = htmlspecialchars($produto['id']);
-        $image = htmlspecialchars($produto['imagem']);
-        $nome  = htmlspecialchars($produto['nome']);
-        $descricao = htmlspecialchars($produto['descricao']);
-        $preco  = htmlspecialchars($produto['preco']);
-        $estoque  = htmlspecialchars($produto['estoque']);
+    foreach ($listaProdutos as $produto) {
+        $num   = htmlspecialchars($produto->getId());
+        $image = htmlspecialchars($produto->getImagem());
+        $nome  = htmlspecialchars($produto->getNome());
+        $descricao = htmlspecialchars($produto->getDescricao());
+        $preco  = htmlspecialchars($produto->getPreco());
+        $estoque  = htmlspecialchars($produto->getEstoque());
 
         echo "    <tr>\n";
         echo "      <td>{$num}</td>\n";
-        echo "      <td><img src='./uploads/{$image}' alt='Foto produto {$nome}'></td>";
+        echo "      <td><img src='../uploads/{$image}' alt='Foto produto {$nome}'></td>";
         echo "      <td>{$nome}</td>\n";
         echo "      <td>{$descricao}</td>\n";
         echo "      <td>R$:$preco</td>\n";
         echo "      <td>{$estoque}</td>";
-        echo "      <td><a href='editarProduto.php?id={$produto['id']}' class='btnEditar'>Editar</a><a href='excluirProduto.php?id={$produto['id']}' onclick='return confirm(`Tem certeza que deseja excluir este produto?`)' class='btnExcluir'>Excluir</a></td>\n";
+        echo "      <td><a href='../?pagina=editarProduto&id={$produto->getId()}' class='btnEditar'>Editar</a><a href='../?pagina=excluirProduto&id={$produto->getId()}' onclick='return confirm(`Tem certeza que deseja excluir este produto?`)' class='btnExcluir'>Excluir</a></td>\n";
         echo "    </tr>\n";
     }
 

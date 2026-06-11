@@ -22,16 +22,18 @@
                 if (!in_array(strtolower($extensao), $permitidos)) {
                     echo 'Tipo de imagem não permitido.';
                 } else {
+                    $dao = new ProdutoDAO();
                     $nomeArquivo = uniqid('prod_') . '.' . $extensao;
-                    move_uploaded_file($_FILES['imagem']['tmp_name'], 'uploads/' . $nomeArquivo);
-                    cadastrarProduto($nomeArquivo, $nome, $descricao, $fPreco, $estoque, $pdo);
-                    header("Location: produtos.php");
+                    move_uploaded_file($_FILES['imagem']['tmp_name'], '../uploads/' . $nomeArquivo);
+                    $dao->createProduto(new Produto($nomeArquivo, $nome, $descricao, $preco, $estoque, $fPreco));
+                    header("Location: ../view/produtos.php");
                     exit();
                 }
             } else {
+                $dao = new ProdutoDAO();
                 $nomeArquivo = "placeholder.jpeg"; 
-                cadastrarProduto($nomeArquivo, $nome, $descricao, $fPreco, $estoque, $pdo);
-                header("Location: produtos.php");
+                $dao->createProduto(new Produto($nomeArquivo, $nome, $descricao, $preco, $estoque, $fPreco));
+                header("Location: ../view/produtos.php");
                 exit();
             }
         }

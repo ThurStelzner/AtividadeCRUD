@@ -7,8 +7,7 @@ include_once __DIR__ . "/../config/funcoes.php";   // inclui apenas uma vez
 require __DIR__ . "/rodape.html";
 ?>
 <div class="tabela">
-<?php
-    $clientes = obterClientes($pdo);
-    exibirTabelaClientes($clientes);
+    <?php
+        exibirTabelaClientes();
     ?>
 <div>

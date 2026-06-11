@@ -9,6 +9,7 @@
     require __DIR__ . "/view/rodape.html";
 
     $pagina = $_GET['pagina'] ?? '';
+    $id = $_GET['id'] ?? '';
 
     switch($pagina) {
         case "cadastrarContato":
@@ -25,6 +26,24 @@
             exit();
         case "produtos":
             header("Location: /view/produtos.php");
+            exit();
+        case "editarContato":
+            header("Location: /view/editarContato.php?id={$id}");
+            exit();
+        case "editarCliente":
+            header("Location: /view/editarCliente.php?id={$id}");
+            exit();
+        case "editarProduto":
+            header("Location: /view/editarProduto.php?id={$id}");
+            exit();
+        case "excluirContato":
+            header("Location: /config/excluirContato.php?id={$id}");
+            exit();
+        case "excluirCliente":
+            header("Location: /config/excluirCliente.php?id={$id}");
+            exit();
+        case "excluirProduto":
+            header("Location: /config/excluirProduto.php?id={$id}");
             exit();
         default:
             break;
